@@ -1,9 +1,12 @@
-package com.example.flickrapp
+package com.example.flickrapp.RecyclerAdapter
 
 import android.content.Intent
 import android.view.*
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.example.flickrapp.JsonResponse.PhotoItem
+import com.example.flickrapp.R
+import com.example.flickrapp.JsonResponse.Response
 import kotlinx.android.synthetic.main.album_layout.view.*
 
 class RecyclerAdapter(private val images: Response?) :

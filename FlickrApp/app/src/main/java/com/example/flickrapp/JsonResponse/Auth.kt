@@ -1,4 +1,4 @@
-package com.example.flickrapp
+package com.example.flickrapp.JsonResponse
 
 class Auth {
     private var KEY: String = "ad8ac362010b97cbee572388dd5ccc4d"

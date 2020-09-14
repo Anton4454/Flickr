@@ -1,17 +1,11 @@
-package com.example.flickrapp
+package com.example.flickrapp.RecyclerAdapter
 
-import android.content.res.Configuration
 import android.os.Bundle
-import android.view.Menu
 import android.view.MenuItem
-import android.view.View
-import android.widget.ArrayAdapter
-import android.widget.AutoCompleteTextView
 import android.widget.ImageView
-import android.widget.Toolbar
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.app.AppCompatDelegate
 import com.bumptech.glide.Glide
+import com.example.flickrapp.R
 
 class PhotoPageActivity : AppCompatActivity() {
     private lateinit var imageView: ImageView

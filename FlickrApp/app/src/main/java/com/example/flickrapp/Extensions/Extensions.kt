@@ -1,4 +1,4 @@
-package com.example.flickrapp
+package com.example.flickrapp.Extensions
 
 import android.view.LayoutInflater
 import android.view.View

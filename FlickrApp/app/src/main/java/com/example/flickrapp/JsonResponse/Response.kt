@@ -1,4 +1,4 @@
-package com.example.flickrapp
+package com.example.flickrapp.JsonResponse
 
 import com.google.gson.annotations.SerializedName
 

@@ -1,4 +1,4 @@
-package com.example.flickrapp
+package com.example.flickrapp.Photo
 
 import android.content.Intent
 import android.content.res.Configuration
@@ -17,6 +17,10 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import br.com.mauker.materialsearchview.MaterialSearchView
 import com.airbnb.lottie.LottieAnimationView
+import com.example.flickrapp.JsonResponse.Auth
+import com.example.flickrapp.JsonResponse.Response
+import com.example.flickrapp.R
+import com.example.flickrapp.RecyclerAdapter.RecyclerAdapter
 import com.google.android.material.snackbar.Snackbar
 import com.google.gson.Gson
 import kotlinx.coroutines.GlobalScope
