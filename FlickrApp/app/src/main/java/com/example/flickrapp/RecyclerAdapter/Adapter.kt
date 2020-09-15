@@ -7,6 +7,7 @@ import com.bumptech.glide.Glide
 import com.example.flickrapp.JsonResponse.PhotoItem
 import com.example.flickrapp.R
 import com.example.flickrapp.JsonResponse.Response
+import com.example.flickrapp.Photo.PhotoPageActivity
 import kotlinx.android.synthetic.main.album_layout.view.*
 
 class RecyclerAdapter(private val images: Response?) :

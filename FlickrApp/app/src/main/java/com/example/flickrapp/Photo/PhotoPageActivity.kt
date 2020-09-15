@@ -1,4 +1,4 @@
-package com.example.flickrapp.RecyclerAdapter
+package com.example.flickrapp.Photo
 
 import android.os.Bundle
 import android.view.MenuItem
