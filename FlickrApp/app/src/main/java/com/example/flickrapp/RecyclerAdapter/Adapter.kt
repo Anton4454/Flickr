@@ -4,6 +4,7 @@ import android.content.Intent
 import android.view.*
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.example.flickrapp.JsonResponse.Auth
 import com.example.flickrapp.JsonResponse.PhotoItem
 import com.example.flickrapp.R
 import com.example.flickrapp.JsonResponse.Response
@@ -12,7 +13,6 @@ import kotlinx.android.synthetic.main.album_layout.view.*
 
 class RecyclerAdapter(private val images: Response?) :
     RecyclerView.Adapter<RecyclerAdapter.PhotoHolder>() {
-
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PhotoHolder {
         var layoutInflater: LayoutInflater = LayoutInflater.from(parent.context)
@@ -26,6 +26,10 @@ class RecyclerAdapter(private val images: Response?) :
 
     override fun getItemCount(): Int = 100
 
+    override fun getItemId(position: Int): Long {
+        return super.getItemId(position)
+    }
+
     override fun onBindViewHolder(holder: PhotoHolder, position: Int) {
         val itemPhoto = images?.photos?.photo?.get(position)
         holder.bindPhoto(itemPhoto)
@@ -34,6 +38,7 @@ class RecyclerAdapter(private val images: Response?) :
     class PhotoHolder(v: View) : RecyclerView.ViewHolder(v), View.OnClickListener {
         private var view: View = v
         private lateinit var stringUrl: String
+        private val auth = Auth()
 
         init {
             v.setOnClickListener(this)
@@ -47,12 +52,11 @@ class RecyclerAdapter(private val images: Response?) :
         }
 
         companion object {
-            private val PHOTO_KEY = "PHOTO"
+            val PHOTO_KEY = "PHOTO"
         }
 
         fun bindPhoto(photoItem: PhotoItem?) {
-            this.stringUrl =
-                "https://farm${photoItem?.farm}.staticflickr.com/${photoItem?.server}/${photoItem?.id}_${photoItem?.secret}.jpg"
+            this.stringUrl = auth.getPhotoUrl(photoItem)
 
             Glide
                 .with(view.context)
@@ -61,6 +65,12 @@ class RecyclerAdapter(private val images: Response?) :
                 )
                 .override(300, 300)
                 .into(view.album)
+
+            if (photoItem?.title?.length == 0) {
+                view.image_description.visibility = View.INVISIBLE
+            } else {
+                view.image_description.text = photoItem?.title
+            }
         }
     }
 }

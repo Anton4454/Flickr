@@ -1,5 +1,6 @@
 package com.example.flickrapp.Photo
 
+import ClickListener.RecyclerItemClickListener
 import android.content.Intent
 import android.content.res.Configuration
 import android.os.Bundle
@@ -9,9 +10,12 @@ import android.text.TextUtils
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import androidx.core.util.Pair as AndroidPair
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.appcompat.widget.Toolbar
+import androidx.core.app.ActivityCompat
+import androidx.core.app.ActivityOptionsCompat
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -46,14 +50,21 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         recyclerView = findViewById(R.id.recyclerView)
+
         searchView = findViewById(R.id.search_view)
         lottieAnimationView = findViewById(R.id.lottieLoading)
         toolbar = findViewById(R.id.toolbar_main)
         searchView.setSuggestionBackground(R.color.suggestionColor)
         setSupportActionBar(toolbar)
-
         title = resources.getString(R.string.recent_pictures)
-        recentRecyclerView()
+
+        var intent = intent
+        jsonImages = intent.getParcelableExtra<Response>("response_list")
+        adapter = RecyclerAdapter(jsonImages)
+        createRecyclerView(adapter)
+
+
+
 
         searchView.setOnQueryTextListener(object : MaterialSearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String): Boolean {
@@ -74,7 +85,28 @@ class MainActivity : AppCompatActivity() {
             override fun onSearchViewClosed() {
             }
         })
+
+        recyclerView.addOnItemTouchListener(
+            RecyclerItemClickListener(
+                this,
+                recyclerView,
+                object : RecyclerItemClickListener.OnItemClickListener {
+                    override fun onItemClick(view: View?, position: Int) {
+                        val showPhotoIntent = Intent(baseContext, PhotoPageActivity::class.java)
+                        showPhotoIntent.putExtra(
+                            RecyclerAdapter.PhotoHolder.PHOTO_KEY,
+                            auth.getPhotoUrl(jsonImages.photos?.photo?.get(position))
+                        )
+
+                        baseContext.startActivity(showPhotoIntent)
+                    }
+
+                    override fun onLongItemClick(view: View?, position: Int) {
+                    }
+                })
+        )
     }
+
 
     private fun lottieStart() {
         lottieAnimationView.visibility = View.VISIBLE
@@ -130,7 +162,7 @@ class MainActivity : AppCompatActivity() {
         }
         super.onActivityResult(requestCode, resultCode, data)
     }
-    
+
     private fun downloadByUrl(stringUrl: String) {
         lottieStart()
         GlobalScope.launch {
@@ -168,10 +200,6 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun recentRecyclerView() {
-        downloadByUrl(auth.getRecent())
-    }
-
     private fun createRecyclerView(adapter: RecyclerAdapter) {
         linearLayoutManager =
             LinearLayoutManager(baseContext, LinearLayoutManager.VERTICAL, false)
@@ -180,6 +208,48 @@ class MainActivity : AppCompatActivity() {
         gridLayoutManager = GridLayoutManager(baseContext, 2)
         recyclerView.layoutManager = gridLayoutManager
         recyclerView.adapter = adapter
+
+        recyclerView.addOnItemTouchListener(
+            RecyclerItemClickListener(
+                this,
+                recyclerView,
+                object : RecyclerItemClickListener.OnItemClickListener {
+                    override fun onItemClick(view: View?, position: Int) {
+                       /* val showPhotoIntent =
+                            Intent(this@MainActivity, PhotoPageActivity::class.java)
+                        showPhotoIntent.putExtra(
+                            RecyclerAdapter.PhotoHolder.PHOTO_KEY,
+                            auth.getPhotoUrl(jsonImages.photos?.photo?.get(position))
+                        )
+
+                        ActivityCompat.startActivity(this@MainActivity, showPhotoIntent, a)*/
+
+                        val showPhotoIntent =
+                            Intent(this@MainActivity, PhotoPageActivity::class.java)
+                        showPhotoIntent.putExtra(
+                            RecyclerAdapter.PhotoHolder.PHOTO_KEY,
+                            auth.getPhotoUrl(jsonImages.photos?.photo?.get(position))
+                        )
+
+                        val photoPageActivity = PhotoPageActivity()
+                        val pair = AndroidPair<View, String>(view?.findViewById(R.id.album), photoPageActivity.VIEW_NAME_HEADER_IMAGE)
+                        val activityOptions: ActivityOptionsCompat =
+                            ActivityOptionsCompat.makeSceneTransitionAnimation(
+                                this@MainActivity,
+                                pair
+                            )
+
+                        ActivityCompat.startActivity(
+                            this@MainActivity,
+                            showPhotoIntent,
+                            activityOptions.toBundle()
+                        )
+                    }
+
+                    override fun onLongItemClick(view: View?, position: Int) {
+                    }
+                })
+        )
     }
 
     override fun onPause() {

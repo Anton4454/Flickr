@@ -2,6 +2,12 @@
     <style name="AppTheme" parent="Theme.AppCompat.DayNight.NoActionBar">
         <item name="android:forceDarkAllowed">true</item>
         <item name="android:navigationBarColor">@color/white</item>
+        <item name="android:windowSharedElementEnterTransition">
+            @transition/grid_detail_transition
+        </item>
+        <item name="android:windowSharedElementExitTransition">
+            @transition/grid_detail_transition
+        </item>
     </style>
 
     <style name="FullSizePhotoTheme" parent="Theme.AppCompat.DayNight.NoActionBar">
@@ -23,6 +29,11 @@
         <item name="android:textColorHint">@color/gray_50</item>
         <item name="android:hint">@string/search_hint</item>
         <item name="android:inputType">textCapWords</item>
+    </style>
+    
+    <style name="SplashLayoutStyle" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="android:windowFullscreen">true</item>
+        <item name="backgroundColor">@color/black</item>
     </style>
 
 </resources>

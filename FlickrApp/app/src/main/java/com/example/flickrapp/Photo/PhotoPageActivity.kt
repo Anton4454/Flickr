@@ -1,35 +1,83 @@
 package com.example.flickrapp.Photo
 
+import android.os.Build
 import android.os.Bundle
-import android.view.MenuItem
+import android.transition.Transition
 import android.widget.ImageView
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
-import com.bumptech.glide.Glide
+import androidx.core.view.ViewCompat
 import com.example.flickrapp.R
+import com.squareup.picasso.Picasso
+
 
 class PhotoPageActivity : AppCompatActivity() {
     private lateinit var imageView: ImageView
-    private lateinit var toolbar: androidx.appcompat.widget.Toolbar
+    private lateinit var stringUrl: String
+    val VIEW_NAME_HEADER_IMAGE = "detail:header:image"
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_photo)
         imageView = findViewById(R.id.photoFullSize)
 
-        val stringUrl: String = intent.getStringExtra("PHOTO")
-        Glide
-            .with(this)
-            .load(
-                stringUrl
-            )
-            .override(1080, 2400)
-            .into(imageView)
+        stringUrl = intent.getStringExtra("PHOTO")
 
+        ViewCompat.setTransitionName(imageView, VIEW_NAME_HEADER_IMAGE);
+
+        loadItem()
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
+    private fun loadItem() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && addTransitionListener()) {
+            loadThumbnail()
+        } else {
+            loadFullSizeImage()
+        }
+    }
+
+    private fun loadThumbnail() {
+        Picasso.with(imageView.context)
+            .load(stringUrl)
+            .noFade()
+            .into(imageView);
+    }
+
+    private fun loadFullSizeImage() {
+        Picasso.with(imageView.getContext())
+            .load(stringUrl)
+            .noFade()
+            .noPlaceholder()
+            .into(imageView)
+    }
+
+    @RequiresApi(21)
+    private fun addTransitionListener(): Boolean {
+        val transition: Transition? = window.sharedElementEnterTransition
+        if (transition != null) {
+            transition.addListener(object : Transition.TransitionListener {
+                override fun onTransitionEnd(transition: Transition) {
+                    loadFullSizeImage()
+
+                    transition.removeListener(this)
+                }
+
+                override fun onTransitionStart(transition: Transition?) {
+                }
+
+                override fun onTransitionCancel(transition: Transition) {
+                    transition.removeListener(this)
+                }
+
+                override fun onTransitionPause(transition: Transition?) {
+                }
+
+                override fun onTransitionResume(transition: Transition?) {
+                }
+            })
+            return true
         }
 
-        return super.onOptionsItemSelected(item)
+        return false
     }
+
 }

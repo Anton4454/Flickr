@@ -6,4 +6,5 @@
     <color name="white">#1c1f1d</color>
     <color name="dark">#ffffff</color>
     <color name="suggestionColor">#575757</color>
+    <color name="white_text">#ffffff</color>
 </resources>

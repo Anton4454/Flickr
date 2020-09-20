@@ -11,4 +11,8 @@ class Auth {
     fun getPhotos(query:String): String {
         return "https://www.flickr.com/services/rest/?method=flickr.photos.search&api_key=${KEY}&tags=${query}&format=json&nojsoncallback=1"
     }
+
+    fun getPhotoUrl(photoItem : PhotoItem?) : String {
+        return "https://farm${photoItem?.farm}.staticflickr.com/${photoItem?.server}/${photoItem?.id}_${photoItem?.secret}.jpg"
+    }
 }
