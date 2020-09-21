@@ -3,6 +3,7 @@ package com.example.flickrapp.Photo
 import ClickListener.RecyclerItemClickListener
 import android.content.Intent
 import android.content.res.Configuration
+import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
 import android.speech.RecognizerIntent
@@ -16,6 +17,7 @@ import androidx.appcompat.app.AppCompatDelegate
 import androidx.appcompat.widget.Toolbar
 import androidx.core.app.ActivityCompat
 import androidx.core.app.ActivityOptionsCompat
+import androidx.core.net.toUri
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -29,6 +31,7 @@ import com.google.android.material.snackbar.Snackbar
 import com.google.gson.Gson
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import java.net.URI
 import java.net.URL
 
 
@@ -215,14 +218,14 @@ class MainActivity : AppCompatActivity() {
                 recyclerView,
                 object : RecyclerItemClickListener.OnItemClickListener {
                     override fun onItemClick(view: View?, position: Int) {
-                       /* val showPhotoIntent =
-                            Intent(this@MainActivity, PhotoPageActivity::class.java)
-                        showPhotoIntent.putExtra(
-                            RecyclerAdapter.PhotoHolder.PHOTO_KEY,
-                            auth.getPhotoUrl(jsonImages.photos?.photo?.get(position))
-                        )
+                        /* val showPhotoIntent =
+                             Intent(this@MainActivity, PhotoPageActivity::class.java)
+                         showPhotoIntent.putExtra(
+                             RecyclerAdapter.PhotoHolder.PHOTO_KEY,
+                             auth.getPhotoUrl(jsonImages.photos?.photo?.get(position))
+                         )
 
-                        ActivityCompat.startActivity(this@MainActivity, showPhotoIntent, a)*/
+                         ActivityCompat.startActivity(this@MainActivity, showPhotoIntent, a)*/
 
                         val showPhotoIntent =
                             Intent(this@MainActivity, PhotoPageActivity::class.java)
@@ -232,7 +235,10 @@ class MainActivity : AppCompatActivity() {
                         )
 
                         val photoPageActivity = PhotoPageActivity()
-                        val pair = AndroidPair<View, String>(view?.findViewById(R.id.album), photoPageActivity.VIEW_NAME_HEADER_IMAGE)
+                        val pair = AndroidPair<View, String>(
+                            view?.findViewById(R.id.album),
+                            photoPageActivity.VIEW_NAME_HEADER_IMAGE
+                        )
                         val activityOptions: ActivityOptionsCompat =
                             ActivityOptionsCompat.makeSceneTransitionAnimation(
                                 this@MainActivity,
@@ -247,6 +253,17 @@ class MainActivity : AppCompatActivity() {
                     }
 
                     override fun onLongItemClick(view: View?, position: Int) {
+                        /*val sendIntent: Intent = Intent().apply {
+                            action = Intent.ACTION_SEND
+                            putExtra(
+                                Intent.EXTRA_STREAM,
+                                Uri.parse(auth.getPhotoUrl(jsonImages?.photos?.photo?.get(position)))
+                            )
+                            type = "image/jpeg/jpg/png"
+                        }
+
+                        val shareIntent = Intent.createChooser(sendIntent, null)
+                        startActivity(shareIntent)*/
                     }
                 })
         )
