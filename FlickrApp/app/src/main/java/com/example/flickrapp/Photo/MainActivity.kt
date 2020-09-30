@@ -3,21 +3,24 @@ package com.example.flickrapp.Photo
 import ClickListener.RecyclerItemClickListener
 import android.content.Intent
 import android.content.res.Configuration
+import android.graphics.Bitmap
+import android.graphics.drawable.BitmapDrawable
+import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.Bundle
+import android.os.Environment
 import android.os.Handler
 import android.speech.RecognizerIntent
 import android.text.TextUtils
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
-import androidx.core.util.Pair as AndroidPair
+import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.appcompat.widget.Toolbar
 import androidx.core.app.ActivityCompat
 import androidx.core.app.ActivityOptionsCompat
-import androidx.core.net.toUri
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -31,8 +34,10 @@ import com.google.android.material.snackbar.Snackbar
 import com.google.gson.Gson
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
-import java.net.URI
+import java.io.File
+import java.io.FileOutputStream
 import java.net.URL
+import androidx.core.util.Pair as AndroidPair
 
 
 class MainActivity : AppCompatActivity() {
@@ -218,15 +223,6 @@ class MainActivity : AppCompatActivity() {
                 recyclerView,
                 object : RecyclerItemClickListener.OnItemClickListener {
                     override fun onItemClick(view: View?, position: Int) {
-                        /* val showPhotoIntent =
-                             Intent(this@MainActivity, PhotoPageActivity::class.java)
-                         showPhotoIntent.putExtra(
-                             RecyclerAdapter.PhotoHolder.PHOTO_KEY,
-                             auth.getPhotoUrl(jsonImages.photos?.photo?.get(position))
-                         )
-
-                         ActivityCompat.startActivity(this@MainActivity, showPhotoIntent, a)*/
-
                         val showPhotoIntent =
                             Intent(this@MainActivity, PhotoPageActivity::class.java)
                         showPhotoIntent.putExtra(
@@ -252,25 +248,8 @@ class MainActivity : AppCompatActivity() {
                         )
                     }
 
-                    override fun onLongItemClick(view: View?, position: Int) {
-                        /*val sendIntent: Intent = Intent().apply {
-                            action = Intent.ACTION_SEND
-                            putExtra(
-                                Intent.EXTRA_STREAM,
-                                Uri.parse(auth.getPhotoUrl(jsonImages?.photos?.photo?.get(position)))
-                            )
-                            type = "image/jpeg/jpg/png"
-                        }
-
-                        val shareIntent = Intent.createChooser(sendIntent, null)
-                        startActivity(shareIntent)*/
-                    }
+                    override fun onLongItemClick(view: View?, position: Int) {4}
                 })
         )
-    }
-
-    override fun onPause() {
-        super.onPause()
-        searchView.clearSuggestions()
     }
 }
